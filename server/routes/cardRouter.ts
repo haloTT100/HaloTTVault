@@ -1,0 +1,75 @@
+import express from "express";
+import sqlite3pkg from "sqlite3";
+
+const { Database } = sqlite3pkg; // destructure Database from CommonJS default export
+
+const router = express.Router();
+
+function runQuery(
+  db: InstanceType<typeof Database>,
+  sql: string,
+  params: any[] = []
+): Promise<{ lastID: number }> {
+  return new Promise((resolve, reject) => {
+    db.run(sql, params, function (err) {
+      if (err) reject(err);
+      else resolve({ lastID: this.lastID });
+    });
+  });
+}
+
+router.get("/", async (req, res) => {
+  try {
+    const db = req.app.locals.db as InstanceType<typeof Database>;
+
+    db.all("SELECT * FROM cards", [], (err, rows) => {
+      if (err) return res.status(500).json({ message: err.message });
+      res.json(rows);
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.post("/", async (req, res) => {
+  try {
+    const db = req.app.locals.db as InstanceType<typeof Database>;
+    const { name, series, gen, event, version, gif, image } = req.body;
+
+    console.log(req.body);
+    if (!name || !series || !gen || !event || !version || !image) {
+      return res.status(400).json({ message: "You have to fill all fields!" });
+    }
+
+    const isGif = gif ? 1 : 0;
+    const versionNum = Number(version);
+
+    console.log(isGif);
+
+    const result = await runQuery(
+      db,
+      "INSERT INTO cards (name, series, gen, event, version, gif, image) VALUES (?,?,?,?,?,?,?)",
+      [name, series, gen, event, versionNum, isGif, image]
+    );
+
+    const newCard = await new Promise<any>((resolve, reject) => {
+      db.get(
+        "SELECT * FROM cards WHERE id = ?",
+        [result.lastID],
+        (err, row) => {
+          if (err) reject(err);
+          else resolve(row);
+        }
+      );
+    });
+
+    console.log(res);
+
+    res.status(201).json(newCard);
+  } catch (err: any) {
+    console.error(err); // <--- this shows why 500 happened
+    res.status(500).json({ message: err.message || "Internal Server Error" });
+  }
+});
+
+export default router;
