@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 // Initialize SQLite database
-const db = new sqlite3.Database("./halottvaultdb.sqlite", (err) => {
+const db = new sqlite3.Database(`./${process.env.DB_NAME}.sqlite`, (err) => {
   if (err) {
     console.error("Failed to connect to SQLite database:", err);
   } else {
