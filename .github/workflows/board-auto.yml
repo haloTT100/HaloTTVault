@@ -1,0 +1,33 @@
+---
+name: "Add Issues to Project Board"
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-to-project:
+    name: Add issue to project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if PROJECT_URL is configured
+        run: |
+          if [ -z "${{ vars.PROJECT_URL }}" ]; then
+            echo "⚠️ PROJECT_URL repository variable is not set."
+            echo "Please configure it in Settings → Secrets and variables"
+            echo "→ Actions → Variables"
+            echo "See docs/project-automation.md for setup instructions"
+            exit 1
+          fi
+          echo "✅ PROJECT_URL is configured: ${{ vars.PROJECT_URL }}"
+
+      - name: Add Issue to Project
+        uses: actions/add-to-project@v1.0.2
+        with:
+          project-url: ${{ vars.PROJECT_URL }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Success notification
+        run: |
+          echo "✅ Issue #${{ github.event.issue.number }} successfully added"
+          echo "Issue: ${{ github.event.issue.title }}"
