@@ -5,20 +5,3 @@
 :root {
   --font-family-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
 }
-
-/* Apply Poppins font globally */
-html,
-body {
-  font-family: "Poppins", sans-serif;
-}
-
-/* Reset and base styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-@layer utilities {
-  /* Custom utilities can go here */
-}
