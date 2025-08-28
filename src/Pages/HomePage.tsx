@@ -1,21 +1,17 @@
-import React, { useState, type FormEvent } from "react";
+import React, {
+  useState,
+  type Dispatch,
+  type FormEvent,
+  type SetStateAction,
+} from "react";
 import { useOutletContext } from "react-router";
 import { createCard } from "../Api";
-
-interface IFormData {
-  name: string;
-  series: string;
-  gen: string;
-  event: string;
-  version: number | "";
-  gif: boolean;
-  image: string;
-}
+import AdminUpload from "../Components/AdminUpload";
+import ListCards from "../Components/ListCards";
+import type { ICard, ICardFormData } from "../types";
 
 const HomePage = () => {
-  const context = useOutletContext<string>();
-
-  const [formData, setFormData] = useState<IFormData>({
+  const [formData, setFormData] = useState<ICardFormData>({
     name: "",
     series: "",
     gen: "",
@@ -24,6 +20,11 @@ const HomePage = () => {
     gif: false,
     image: "",
   });
+
+  const { cards, setCards } = useOutletContext<{
+    cards: ICard[];
+    setCards: Dispatch<SetStateAction<ICard[]>>;
+  }>();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -52,14 +53,33 @@ const HomePage = () => {
     }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log(formData);
 
-    const resp = await createCard(formData);
-    console.log(resp); // now you'll get the inserted card or error
+    createCard(formData)
+      .then((newCard) => {
+        setCards((prev) => [...prev, newCard]); // append safely
+        console.log("Card added:", newCard);
+      })
+      .catch((err) => {
+        console.error("Could not create card:", err);
+      });
   };
-  return <div></div>;
+
+  return (
+    <>
+      <div className=" w-full">
+        <div className="fixed right-0 bottom-0">
+          <AdminUpload
+            formData={formData}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+          />
+        </div>
+      </div>
+      <div>{cards ? <ListCards cards={cards} /> : <p>Loading</p>}</div>
+    </>
+  );
 };
 
 export default HomePage;

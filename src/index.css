@@ -5,3 +5,17 @@
 :root {
   --font-family-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
 }
+
+@media screen and (max-width: 640px) {
+  .sm-max {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+
+  .card {
+    width: 256px;
+  }
+}

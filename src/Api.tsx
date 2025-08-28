@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { ICard } from "./types";
 
 export const getTest = async () => {
   await axios
@@ -15,23 +16,25 @@ export const getTest = async () => {
     });
 };
 
-export const getAllCards = async () => {
-  await axios.get("http://localhost:3000/api/cards").then((res) => {
-    if (res) {
-      return res.data;
-    } else {
-      return [];
-    }
-  });
+export const getAllCards = (): Promise<ICard[]> => {
+  return axios
+    .get("http://localhost:3000/api/cards")
+    .then((res) => {
+      return res?.data ?? [];
+    })
+    .catch((err) => {
+      console.error(err);
+      return Promise.reject(err);
+    });
 };
 
-export const createCard = async (formData: any) => {
-  try {
-    const res = await axios.post("http://localhost:3000/api/cards", {
-      ...formData,
+export const createCard = (formData: ICard): Promise<ICard> => {
+  return axios
+    .post<ICard>("http://localhost:3000/api/cards", formData)
+    .then((res) => {
+      if (!res.data) {
+        return Promise.reject(new Error("No card returned from server"));
+      }
+      return res.data;
     });
-    return res.data; // <-- return the data
-  } catch (err: any) {
-    return { error: err };
-  }
 };

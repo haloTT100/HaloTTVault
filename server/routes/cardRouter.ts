@@ -23,7 +23,10 @@ router.get("/", async (req, res) => {
     const db = req.app.locals.db as InstanceType<typeof Database>;
 
     db.all("SELECT * FROM cards", [], (err, rows) => {
-      if (err) return res.status(500).json({ message: err.message });
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      }
+      console.log(rows);
       res.json(rows);
     });
   } catch (err) {
@@ -48,14 +51,14 @@ router.post("/", async (req, res) => {
 
     const result = await runQuery(
       db,
-      "INSERT INTO cards (name, series, gen, event, version, gif, image) VALUES (?,?,?,?,?,?,?)",
+      "INSERT INTO cards (name, series, gen, event, version, gif, image) VALUES (?, ?, ?, ?, ?, ?, ?)",
       [name, series, gen, event, versionNum, isGif, image]
     );
 
     const newCard = await new Promise<any>((resolve, reject) => {
       db.get(
-        "SELECT * FROM cards WHERE id = ?",
-        [result.lastID],
+        "SELECT * FROM cards WHERE rowid = last_insert_rowid()",
+        [],
         (err, row) => {
           if (err) reject(err);
           else resolve(row);
