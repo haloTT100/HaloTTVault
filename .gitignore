@@ -12,7 +12,7 @@
 *.env
 
 # Local database files
-*.sqlite
+halottvaultdb.sqlite
 *.db
 
 # User-specific files (MonoDevelop/Xamarin Studio)
