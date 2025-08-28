@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
 
     const isGif = gif ? 1 : 0;
     // Keep version as string to match database schema
-    const versionStr = version.toString();
+    const versionStr = version;
 
     console.log(isGif);
 
