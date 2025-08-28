@@ -37,22 +37,23 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const db = req.app.locals.db as InstanceType<typeof Database>;
-    const { name, series, gen, event, version, gif, image } = req.body;
+    const { code, name, series, gen, event, version, gif, image } = req.body;
 
     console.log(req.body);
-    if (!name || !series || !gen || !event || !version || !image) {
+    if (!code || !name || !series || !gen || !event || !version || !image) {
       return res.status(400).json({ message: "You have to fill all fields!" });
     }
 
     const isGif = gif ? 1 : 0;
-    const versionNum = Number(version);
+    // Keep version as string to match database schema
+    const versionStr = version.toString();
 
     console.log(isGif);
 
     const result = await runQuery(
       db,
-      "INSERT INTO cards (name, series, gen, event, version, gif, image) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      [name, series, gen, event, versionNum, isGif, image]
+      "INSERT INTO cards (code, name, series, gen, event, version, gif, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      [code, name, series, gen, event, versionStr, isGif, image]
     );
 
     const newCard = await new Promise<any>((resolve, reject) => {

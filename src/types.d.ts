@@ -1,4 +1,5 @@
 export interface ICardFormData {
+  code: string;
   name: string;
   series: string;
   gen: string;
@@ -9,6 +10,8 @@ export interface ICardFormData {
 }
 
 export interface ICard {
+  id?: string;
+  code?: string;
   name: string;
   series: string;
   gen: string;

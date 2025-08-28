@@ -39,8 +39,18 @@ const AdminUpload: React.FC<IAdminUpload> = ({
             />
           </div>
           <section className="flex flex-col">
+            <label htmlFor="cardCode">Code</label>
+            <input
+              className="border p-1 bg-white text-black"
+              type="text"
+              id="cardCode"
+              value={formData.code}
+              onChange={handleChange}
+              name="cardCode"
+            />
+          </section>
+          <section className="flex flex-col">
             <label htmlFor="cardName">Name</label>
-
             <input
               className="border p-1 bg-white text-black"
               type="text"
