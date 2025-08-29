@@ -45,15 +45,14 @@ router.post("/", async (req, res) => {
     }
 
     const isGif = gif ? 1 : 0;
-    // Keep version as string to match database schema
-    const versionStr = version;
+    const versionNum = Number(version);
 
     console.log(isGif);
 
     const result = await runQuery(
       db,
       "INSERT INTO cards (code, name, series, gen, event, version, gif, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-      [code, name, series, gen, event, versionStr, isGif, image]
+      [code, name, series, gen, event, versionNum, isGif, image]
     );
 
     const newCard = await new Promise<any>((resolve, reject) => {
