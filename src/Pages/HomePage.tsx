@@ -12,6 +12,7 @@ import type { ICard, ICardFormData } from "../types";
 
 const HomePage = () => {
   const [formData, setFormData] = useState<ICardFormData>({
+    code: "",
     name: "",
     series: "",
     gen: "",
