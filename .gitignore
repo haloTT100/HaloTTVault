@@ -15,6 +15,9 @@
 halottvaultdb.sqlite
 *.db
 
+# server public images
+server/public/images/*
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

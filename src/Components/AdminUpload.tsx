@@ -142,6 +142,23 @@ const AdminUpload: React.FC<IAdminUpload> = ({
                   Yes
                 </option>
               </select>
+              <label className="ml-4 mr-2" htmlFor="card3d">
+                Is 3D?
+              </label>
+              <select
+                className="border p-1 bg-black"
+                id="card3d"
+                value={formData["3d"] ? "1" : "0"}
+                onChange={handleChange}
+                name="card3d"
+              >
+                <option value="0" className="text-white">
+                  No
+                </option>
+                <option value="1" className="text-white">
+                  Yes
+                </option>
+              </select>
             </div>
           </section>
           <input

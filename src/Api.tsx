@@ -3,7 +3,7 @@ import type { ICard } from "./types";
 
 export const getTest = async () => {
   await axios
-    .get("http://localhost:3000/api/")
+    .get("http://localhost:3001/api/")
     .then((res) => {
       if (res.data) {
         return res.data;
@@ -18,7 +18,7 @@ export const getTest = async () => {
 
 export const getAllCards = (): Promise<ICard[]> => {
   return axios
-    .get("http://localhost:3000/api/cards")
+    .get("http://localhost:3001/api/cards")
     .then((res) => {
       return res?.data ?? [];
     })
@@ -30,7 +30,7 @@ export const getAllCards = (): Promise<ICard[]> => {
 
 export const createCard = (formData: ICard): Promise<ICard> => {
   return axios
-    .post<ICard>("http://localhost:3000/api/cards", formData)
+    .post<ICard>("http://localhost:3001/api/cards", formData)
     .then((res) => {
       if (!res.data) {
         return Promise.reject(new Error("No card returned from server"));

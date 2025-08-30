@@ -5,6 +5,7 @@ export interface ICardFormData {
   gen: string;
   event: string;
   version: number | "";
+  "3d": boolean;
   gif: boolean;
   image: string;
 }
@@ -17,6 +18,7 @@ export interface ICard {
   gen: string;
   event: string;
   version: number | "";
+  "3d": boolean;
   gif: boolean;
   image: string;
 }
